@@ -58,7 +58,7 @@ complete: Triggered when the entire queue is completed.
 ## Usage
 
 ```javascript
-import EzQueue from './lib/index.js';
+import EzQueue from 'eazy-queue-ks';
 
 const ezq = new EzQueue();
 
