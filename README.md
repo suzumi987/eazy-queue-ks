@@ -86,3 +86,7 @@ ezq.on('done', (result, job) => {
 });
 
 ```
+
+## Issues and Contributions
+
+If you encounter any issues or have suggestions for improvements, please open an issue on the [GitHub repository](https://github.com/suzumi987/eazy-queue-ks.git).

@@ -12,19 +12,17 @@ import { EventEmitter } from 'events';
  * @method checkQueue - Check the queue length
  */
 class EzQueue<T> extends EventEmitter {
-  private queue: Array<T>;
-  private isProcess: boolean;
+  private queue: Array<T> = [];
+  private isProcess = false;
 
   constructor() {
     super();
-    this.queue = [];
-    this.isProcess = false;
   }
 
-  add(data: T) {
+  add(data: T | T[]) {
     if (Array.isArray(data) && data.length > 0) {
       this.queue = this.queue.concat(data);
-    } else {
+    } else if (!Array.isArray(data)){
       this.queue.push(data);
     }
     if (!this.isProcess) {
@@ -43,8 +41,8 @@ class EzQueue<T> extends EventEmitter {
 
     const c = this.checkQueue();
     if (c === 0) {
-      this.emit('complete');
       this.isProcess = false;
+      this.emit('complete');
     } else {
       this.emit('job');
     }
