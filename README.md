@@ -22,7 +22,7 @@ import EzQueue from 'eazy-queue-ks';
 - Asynchronously process the items with a customizable callback function.
 - Events for queue progress tracking.
   - `job`: Triggered when the queue starts processing.
-  - `done`: Triggered when a job is done (returns `true`).
+  - `done`: Triggered when a job is done.
   - `complete`: Triggered when the entire queue is completed.
 
 ### Class: EzQueue\<T>
@@ -50,7 +50,9 @@ Get the current number of items in the queue.
 ### Events
 
 job: Triggered when the queue starts processing.
+
 done: Triggered when a job is done (returns true).
+
 complete: Triggered when the entire queue is completed.
 
 ## Usage
