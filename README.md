@@ -23,7 +23,6 @@ import EzQueue from 'eazy-queue-ks';
 - Events for queue progress tracking.
   - `job`: Triggered when the queue starts processing.
   - `done`: Triggered when a job is done (returns `true`).
-  - `finish`: Triggered when a job is finished (returns `false`).
   - `complete`: Triggered when the entire queue is completed.
 
 ### Class: EzQueue\<T>
@@ -52,7 +51,6 @@ Get the current number of items in the queue.
 
 job: Triggered when the queue starts processing.
 done: Triggered when a job is done (returns true).
-finish: Triggered when a job is finished (returns false).
 complete: Triggered when the entire queue is completed.
 
 ## Usage
@@ -79,13 +77,10 @@ ezq.on('complete', () => {
   console.log('complete');
 });
 
-ezq.on('done', (job) => {
-  // if ezq.process is return. job is data of return in ezq.process example 'ok 1', 'ok 2'
-  console.log('done', job);
+ezq.on('done', (result, job) => {
+  // if ezq.process is return ezq.process example 'ok 1', 'ok 2'
+  // job is data of process example 1, 2 ,3
+  console.log('done', result, job);
 });
 
-ezq.on('finish', (job) => {
-  // return same ezq.process job example 1, 2
-  console.log('finish', job);
-});
 ```

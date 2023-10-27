@@ -7,16 +7,17 @@ import { EventEmitter } from 'events';
  * @event done - When the job is done (return true)
  * @event finish - When the job is finished (return false)
  * @event complete - When the queue all is completed
+ * @method add - Add a job to the queue
+ * @method process - Start the queue
+ * @method checkQueue - Check the queue length
  */
 class EzQueue<T> extends EventEmitter {
   private queue: Array<T>;
-  private limit: number;
   private isProcess: boolean;
 
   constructor() {
     super();
     this.queue = [];
-    this.limit = 1000;
     this.isProcess = false;
   }
 
@@ -33,27 +34,23 @@ class EzQueue<T> extends EventEmitter {
 
   async process(callback: (data: T | undefined) => Promise<boolean>) {
     this.isProcess = true;
-    const processNext = async () => {
-      if (this.queue.length === 0) {
-        this.emit('complete');
-        this.isProcess = false;
-        return;
-      }
 
-      const q = this.queue.shift();
-      const result = await new Promise((resolve) => {
-        resolve(callback(q));
-      });
-      setTimeout(() => {
-        if (result) this.emit('done', q);
-        this.emit('finish', q);
-        processNext();
-      }, 1000 / this.limit);
-    };
-    processNext();
+    while (this.queue.length > 0) {
+      const job = this.queue.shift();
+      const result = await callback(job);
+      this.emit('done', result, job);
+    }
+
+    const c = this.checkQueue();
+    if (c === 0) {
+      this.emit('complete');
+      this.isProcess = false;
+    } else {
+      this.emit('job');
+    }
   }
 
-  checkQueue() {
+  public checkQueue() {
     return this.queue.length;
   }
 }

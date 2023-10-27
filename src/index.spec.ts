@@ -27,19 +27,32 @@ describe('EzQueue', () => {
     expect(ezQueue.checkQueue()).toBe(0);
   });
 
-  test('emits the job, done, finish, and complete events', (done) => {
+  test('emits the job, done events', (done) => {
     const callback = jest.fn().mockResolvedValue(true);
 
     ezQueue.on('job', () => {
+      ezQueue.process(callback);
       done();
     });
 
-    ezQueue.on('done', (data) => {
-      expect(data).toBe(1);
+    ezQueue.on('done', (result, job) => {
+      expect(job).toBe(1);
+      expect(result).toBe(true);
     });
 
-    ezQueue.on('finish', (data) => {
-      expect(data).toBe(1);
+    ezQueue.add(1);
+  });
+
+  test('emits the job complete events', (done) => {
+    const callback = jest.fn().mockResolvedValue(true);
+
+    ezQueue.on('job', () => {
+      ezQueue.process(callback);
+    });
+
+    ezQueue.on('done', (result, job) => {
+      expect(job).toBe(1);
+      expect(result).toBe(true);
     });
 
     ezQueue.on('complete', () => {
@@ -47,7 +60,5 @@ describe('EzQueue', () => {
     });
 
     ezQueue.add(1);
-
-    ezQueue.process(callback);
   });
 });
