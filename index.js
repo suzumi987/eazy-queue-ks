@@ -1,27 +1,26 @@
-import { EventEmitter } from 'events';
+const { EventEmitter } = require('events');
 
 /**
  * @class EzQueue
  * @extends EventEmitter
  * @event job - When the queue is started
  * @event done - When the job is done (return true)
- * @event finish - When the job is finished (return false)
  * @event complete - When the queue all is completed
  * @method add - Add a job to the queue
  * @method process - Start the queue
  * @method checkQueue - Check the queue length
  */
-class EzQueue<T> extends EventEmitter {
-  private queue: Array<T> = [];
-  private isProcess = false;
+class EzQueue extends EventEmitter {
 
   constructor() {
     super();
+    this.queue = [];
+    this.isProcess = false;
   }
 
-  add(data: T | T[]) {
+  add(data) {
     if (Array.isArray(data) && data.length > 0) {
-      this.queue = this.queue.concat(data);
+      this.queue.push(...data);
     } else if (!Array.isArray(data)){
       this.queue.push(data);
     }
@@ -30,7 +29,7 @@ class EzQueue<T> extends EventEmitter {
     }
   }
 
-  async process(callback: (data: T | undefined) => Promise<boolean>) {
+  async process(callback) {
     this.isProcess = true;
 
     while (this.queue.length > 0) {
@@ -48,9 +47,9 @@ class EzQueue<T> extends EventEmitter {
     }
   }
 
-  public checkQueue() {
+  checkQueue() {
     return this.queue.length;
   }
 }
 
-export default EzQueue;
+module.exports = EzQueue;

@@ -1,7 +1,7 @@
-import EzQueue from './index';
+import EzQueue from './src/index';
 
 describe('EzQueue', () => {
-  let ezQueue: EzQueue<number | number[]>;
+  let ezQueue;
 
   beforeEach(() => {
     ezQueue = new EzQueue();
